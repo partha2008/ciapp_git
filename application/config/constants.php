@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 // User-defined functions
-define('ROOT_URL', 'http://localhost/ciapp/');
+define('ROOT_URL', 'http://localhost/ci_app/');
 
 define('PAGINATION_PER_PAGE', 10);
 

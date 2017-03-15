@@ -4,7 +4,11 @@
 	require APPPATH . '/libraries/REST_Controller.php';
 	use Restserver\Libraries\REST_Controller;
 	
+	require_once APPPATH . '/libraries/BeforeValidException.php';
+	require_once APPPATH . '/libraries/ExpiredException.php';
+	require_once APPPATH . '/libraries/SignatureInvalidException.php';
 	require_once APPPATH . '/libraries/JWT.php';
+	
 	use \Firebase\JWT\JWT;
 	
 	class User extends REST_Controller {
@@ -23,6 +27,7 @@
 			$this->methods['users_delete']['limit'] = 50; // 50 requests per hour per user/key
 		}
 		
+		// register user
 		public function register_post(){
 			$username = $this->post('username');
 			$email = $this->post('email');
@@ -84,6 +89,7 @@
 			}
 		}
 		
+		// login functionality
 		public function login_post(){
 			$username = $this->post('username');
 			$password = $this->post('password');
@@ -130,7 +136,7 @@
 			
 				$response = array(
 					"status" => true,
-					"message" => "You have been successfully registered",
+					"message" => "You have been successfully authenticated",
 					"data" => array(
 						"username" => $this->post('username'),
 						"email" => $this->post('email'),
@@ -148,6 +154,7 @@
 			}
 		}
 		
+		// password recovery
 		public function forget_post(){
 			$email = $this->post('email');
 			
@@ -174,6 +181,7 @@
 			}
 		}
 		
+		// fetch all users details
 		public function users_get(){
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
 			
@@ -181,138 +189,76 @@
 				$key = get_cookie('reww_secret_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
-				}catch(\Exception $e){
-					print "Error!: " . $e->getMessage();
-					die();
-				}
-				$user_list = $this->userdata->grab_user_details(array("is_active" => '1', "role" => '1'));
-				if(!empty($user_list)){					
-					foreach($user_list AS $key => $user){
-						$user_data[$key]['username'] = $user->username;
-						$user_data[$key]['email'] = $user->email;
-						$user_data[$key]['user_discount'] = $user->user_discount;
+					
+					$user_list = $this->userdata->grab_user_details(array("is_active" => '1', "role" => '1'));
+					if(!empty($user_list)){					
+						foreach($user_list AS $key => $user){
+							$user_data[$key]['username'] = $user->username;
+							$user_data[$key]['email'] = $user->email;
+							$user_data[$key]['user_discount'] = $user->user_discount;
+						}
+						$response = array(
+							"status" => true,
+							"message" => "Users fetched succesfully",
+							"data" => $user_data
+						);
+					}else{
+						$response = array(
+							"status" => false,
+							"message" => "User not found"
+						);
 					}
-					$response = array(
-						"status" => true,
-						"message" => "Users fetched succesfully",
-						"data" => $user_data
-					);
-				}else{
+					$this->set_response($response, REST_Controller::HTTP_OK);
+				}catch(\Exception $e){					
 					$response = array(
 						"status" => false,
-						"message" => "User not found"
+						"message" => $e->getMessage()
 					);
+					$this->set_response($response, REST_Controller::HTTP_OK);
 				}
-				$this->set_response($response, REST_Controller::HTTP_OK);
 			}else{
 				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
 			}
 		}
-
-		/*public function users_get()
-		{
-			// Users from a data store e.g. database
-			$users = [
-				['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-				['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-				['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-			];
-
-			$id = $this->get('id');
-
-			// If the id parameter doesn't exist return all the users
-
-			if ($id === NULL)
-			{
-				// Check if the users data store contains users (in case the database result returns NULL)
-				if ($users)
-				{
-					// Set the response and exit
-					$this->response($users, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-				}
-				else
-				{
-					// Set the response and exit
-					$this->response([
-						'status' => FALSE,
-						'message' => 'No users were found'
-					], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-				}
-			}
-
-			// Find and return a single record for a particular user.
-			else {
-				$id = (int) $id;
-
-				// Validate the id.
-				if ($id <= 0)
-				{
-					// Invalid id, set the response and exit.
-					$this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-				}
-
-				// Get the user from the array, using the id as key for retrieval.
-				// Usually a model is to be used for this.
-
-				$user = NULL;
-
-				if (!empty($users))
-				{
-					foreach ($users as $key => $value)
-					{
-						if (isset($value['id']) && $value['id'] === $id)
-						{
-							$user = $value;
+		
+		// fetch specific user details
+		public function user_get(){
+			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
+			
+			if($token){
+				$key = get_cookie('reww_secret_key');
+				try{
+					$decoded = JWT::decode($token, $key, array('HS256'));
+					
+					$user_list = $this->userdata->grab_user_details(array("username" => $decoded->username));
+					if(!empty($user_list)){					
+						foreach($user_list AS $key => $user){
+							$user_data['username'] = $user->username;
+							$user_data['email'] = $user->email;
+							$user_data['user_discount'] = $user->user_discount;
 						}
+						$response = array(
+							"status" => true,
+							"message" => "User fetched succesfully",
+							"data" => $user_data
+						);
+					}else{
+						$response = array(
+							"status" => false,
+							"message" => "User not found"
+						);
 					}
+					$this->set_response($response, REST_Controller::HTTP_OK);
+				}catch(\Exception $e){					
+					$response = array(
+						"status" => false,
+						"message" => $e->getMessage()
+					);
+					$this->set_response($response, REST_Controller::HTTP_OK);
 				}
-
-				if (!empty($user))
-				{
-					$this->set_response($user, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-				}
-				else
-				{
-					$this->set_response([
-						'status' => FALSE,
-						'message' => 'User could not be found'
-					], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-				}
+			}else{
+				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
 			}
-		}*/
-
-		public function users_post()
-		{
-			// $this->some_model->update_user( ... );
-			$message = [
-				'id' => 100, // Automatically generated by the model
-				'name' => $this->post('name'),
-				'email' => $this->post('email'),
-				'message' => 'Added a resource'
-			];
-
-			$this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
 		}
-
-		public function users_delete()
-		{
-			$id = (int) $this->get('id');
-
-			// Validate the id.
-			if ($id <= 0)
-			{
-				// Set the response and exit
-				$this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-			}
-
-			// $this->some_model->delete_something($id);
-			$message = [
-				'id' => $id,
-				'message' => 'Deleted the resource'
-			];
-
-			$this->set_response($message, REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
-		}
-
 	}
 ?>
