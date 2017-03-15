@@ -106,7 +106,27 @@
 				$date = time();
 				$token['iat'] = $date;
 				$token['exp'] = $date + 60*60;
-				$token = JWT::encode($token, $this->defaultdata->generatedRandString(10));
+				$super_secret = $this->defaultdata->generatedRandString(20);
+				
+				// delete cookie
+				$cookie = array(
+					'name'   => 'secret_key',
+					'value'  => '',
+					'expire' => '0',
+					'prefix' => 'reww_'
+				);
+				delete_cookie($cookie);
+					
+				// set cookie
+				$cookie = array(
+					'name'   => 'secret_key',
+					'value'  => $super_secret,
+					'expire' => time()+3600,
+					'prefix' => 'reww_',
+				);
+				set_cookie($cookie);
+				
+				$token = JWT::encode($token, $super_secret);
 			
 				$response = array(
 					"status" => true,
@@ -127,8 +147,69 @@
 				$this->set_response($response, REST_Controller::HTTP_OK);
 			}
 		}
+		
+		public function forget_post(){
+			$email = $this->post('email');
+			
+			// check for email existense
+			$user_data = $this->userdata->grab_user_details(array("email" => $email));
+			if(!empty($user_data)){
+				$password = $this->defaultdata->getGeneratedPassword(8);
+				$this->userdata->update_user_details(array("email" => $email), array("password" => $this->defaultdata->getSha256Base64Hash($password), "original_password" => $password));
+				
+				// Send mail to user for password recovery
+				
+				// Ends				
+				$response = array(
+					"status" => false,
+					"message" => "Password has been reset. New Password has been generated. An email has been sent to the given email address to get the login details"
+				);
+				$this->set_response($response, REST_Controller::HTTP_OK);
+			}else{
+				$response = array(
+					"status" => false,
+					"message" => "The given email address does not exists"
+				);
+				$this->set_response($response, REST_Controller::HTTP_OK);
+			}
+		}
+		
+		public function users_get(){
+			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
+			
+			if($token){
+				$key = get_cookie('reww_secret_key');
+				try{
+					$decoded = JWT::decode($token, $key, array('HS256'));
+				}catch(\Exception $e){
+					print "Error!: " . $e->getMessage();
+					die();
+				}
+				$user_list = $this->userdata->grab_user_details(array("is_active" => '1', "role" => '1'));
+				if(!empty($user_list)){					
+					foreach($user_list AS $key => $user){
+						$user_data[$key]['username'] = $user->username;
+						$user_data[$key]['email'] = $user->email;
+						$user_data[$key]['user_discount'] = $user->user_discount;
+					}
+					$response = array(
+						"status" => true,
+						"message" => "Users fetched succesfully",
+						"data" => $user_data
+					);
+				}else{
+					$response = array(
+						"status" => false,
+						"message" => "User not found"
+					);
+				}
+				$this->set_response($response, REST_Controller::HTTP_OK);
+			}else{
+				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
+			}
+		}
 
-		public function users_get()
+		/*public function users_get()
 		{
 			// Users from a data store e.g. database
 			$users = [
@@ -198,7 +279,7 @@
 					], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
 				}
 			}
-		}
+		}*/
 
 		public function users_post()
 		{
