@@ -100,6 +100,9 @@ class Defaultdata extends CI_Model {
 		$this->session->unset_userdata('usrid');
 		$this->session->unset_userdata('usrname');
 		$this->session->unset_userdata('usremail');	
+	}
+	public function getSha256Base64Hash($s) {
+		return base64_encode(hash("sha256", $s, True));
 	}	
 	public function getGeneratedPassword( $length = 6 ) {
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
@@ -136,6 +139,14 @@ class Defaultdata extends CI_Model {
 		}
 
 		return $text;
+	}
+	
+	public function checkEmailFormat($email){
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+		  return true;
+		} else {
+		  return false;
+		}
 	}
 	
 	public function send_email(){
