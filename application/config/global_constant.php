@@ -86,3 +86,10 @@
 	$config['month'][] = 'November'; 
 	$config['month'][] = 'December'; 
 	// Ends
+	
+	// Mailing Date Status
+	$config['mailing_dates_status'][0] = 'Awaiting Client Proof approval'; 
+	$config['mailing_dates_status'][1] = 'Proof aproved Awaiting'; 
+	$config['mailing_dates_status'][2] = 'Mail Sent'; 
+	$config['mailing_dates_status'][3] = 'Refunded';
+	// Ends

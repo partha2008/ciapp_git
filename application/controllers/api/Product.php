@@ -20,33 +20,28 @@
 			$this->methods['users_delete']['limit'] = 50; // 50 requests per hour per user/key
 		}
 		
-		// fetch all product details
+		public function _group_by($array, $key) {
+			$return = array();
+			foreach($array as $k => $val) {
+				$arr = $val = (array)$val;				
+				unset($arr[$key]);
+				
+				if($arr['url']){
+					$arr['url'] = UPLOAD_PATH.$arr['url'];
+				}
+				$return[$val[$key]][] = $arr;
+			}
+			return $return;
+		}
+		
+		// fetch all products
 		public function products_get(){
-			$table_row_count = $this->db->count_all(TABLE_PRODUCT);
 			
 			// check for existense
-			$product_data = $this->productdata->grab_product_join_category(array(), array(), array($table_row_count, 0));
+			$product_data = $this->productdata->grab_product_join_category_all(array(), array());
 			
 			if(!empty($product_data)){
-				$cnt = 0;
-				foreach($product_data as $data){
-					$product_details[$cnt]['description'] = $data->description;
-					$product_details[$cnt]['code'] = $data->code;
-					$product_details[$cnt]['imagename'] = $data->imagename;
-					$product_details[$cnt]['price'] = $data->price;
-					$product_details[$cnt]['order_id'] = $data->order_id;
-					$product_details[$cnt]['caption'] = $data->productname;
-					$product_details[$cnt]['url'] = UPLOAD_PATH.$data->imagepathname;
-					
-					$final_arr[$data->cat_code] = $product_details;
-					
-					$cnt++;
-				}
-				
-				/*echo "<pre>";
-				print_r($product_details);
-				die();*/
-				
+				$final_arr = $this->_group_by($product_data, 'cat_code');
 				$response = array(
 					"status" => true,
 					"message" => "Products fetched successfully",

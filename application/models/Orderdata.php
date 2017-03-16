@@ -26,8 +26,21 @@ class Orderdata extends CI_Model {
 		if(!empty($like)){
 			$whr .= " AND (orders.first_name LIKE '%".$like['searchname']."%' OR orders.last_name LIKE '%".$like['searchname']."%')";
 		}
+		$where = '';
+		if(!empty($cond)){
+			$cnt = 1;
+			foreach($cond AS $key => $val){
+				if($cnt == count($cond)){
+					$where .= 'orders.'.$key."=".$val;
+				}else{
+					$where .= 'orders.'.$key."=".$val." AND ";
+				}				
+				
+				$cnt++;
+			}
+		}
 		
-		$sql = "SELECT mailing_dates.mailing_date_id, mailing_dates.item, mailing_dates.quantity, mailing_dates.proof_pdf, mailing_dates.proofapproved_date, mailing_dates.proofsent_date, mailing_dates.total, mailing_dates.date, mailing_dates.status, orders.orderid, orders.email, orders.first_name, orders.last_name, orders.date_added FROM mailing_dates LEFT JOIN orders ON mailing_dates.order_id = orders.order_id WHERE orders.status='".$cond['status']."' ".$whr." ORDER BY orders.date_added DESC";
+		$sql = "SELECT mailing_dates.mailing_date_id, mailing_dates.item, mailing_dates.quantity, mailing_dates.proof_pdf, mailing_dates.proofapproved_date, mailing_dates.proofsent_date, mailing_dates.total, mailing_dates.date, mailing_dates.status, orders.order_id, orders.orderid, orders.email, orders.first_name, orders.last_name, orders.date_added FROM mailing_dates LEFT JOIN orders ON mailing_dates.order_id = orders.order_id WHERE ".$where.$whr." ORDER BY orders.date_added DESC";
 		
 		$query = $this->db->query($sql);
 		

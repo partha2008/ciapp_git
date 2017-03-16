@@ -43,6 +43,25 @@ class Productdata extends CI_Model {
 		return $query->result();
 	}
 	
+	public function grab_product_join_category_all($cond = array(), $like = array()){		
+		
+		$likes = '';
+		if(!empty($like)){
+			if($like['category_id']){
+				$likes .= " AND ".TABLE_PRODUCT.".category_id = ".$like['category_id'];
+			}
+			if($like['productname']){
+				$likes .= " AND ".TABLE_PRODUCT.".productname LIKE '%".$like['productname']."%'";
+			}
+		}
+		
+		$sql = "SELECT ".TABLE_CATEGORY.".code as cat_code, ".TABLE_PRODUCT.".code as code, ".TABLE_PRODUCT.".description as description, ".TABLE_PRODUCT.".imagename as imagename, ".TABLE_PRODUCT.".price as price, ".TABLE_PRODUCT.".order_id as order_id, ".TABLE_PRODUCT.".productname as caption, ".TABLE_PRODUCT.".imagepathname as url FROM ".TABLE_CATEGORY." LEFT JOIN ".TABLE_PRODUCT." ON ".TABLE_PRODUCT.".category_id = ".TABLE_CATEGORY.".category_id WHERE ".TABLE_CATEGORY.".is_active = '1' AND ".TABLE_PRODUCT.".is_active = '1' ".$likes." ORDER BY ".TABLE_PRODUCT.".date_added DESC";
+		
+		$query = $this->db->query($sql);
+		
+		return $query->result();
+	}
+	
 	public function insert_product($data = array()){
 
 		$this->db->insert(TABLE_PRODUCT, $data); 
