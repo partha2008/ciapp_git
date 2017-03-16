@@ -107,3 +107,4 @@ define('TABLE_ORDER', 'orders');
 define('TABLE_MAILING_DATE', 'mailing_dates');
 define('TABLE_UPLOADED_FILE', 'uploaded_files');
 define('TABLE_COUPON', 'coupon');
+define('TABLE_LOG', 'log');

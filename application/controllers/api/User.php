@@ -168,7 +168,7 @@
 				
 				// Ends				
 				$response = array(
-					"status" => false,
+					"status" => true,
 					"message" => "Password has been reset. New Password has been generated. An email has been sent to the given email address to get the login details"
 				);
 				$this->set_response($response, REST_Controller::HTTP_OK);

@@ -78,4 +78,32 @@ class Orderdata extends CI_Model {
 		
 		return true;
 	}
+	
+	public function insert_order($data = array()){
+
+		$this->db->insert(TABLE_ORDER, $data); 
+		
+		return $this->db->insert_id();
+	}
+	
+	public function insert_mailing_dates($data = array()){
+
+		$this->db->insert(TABLE_MAILING_DATE, $data); 
+		
+		return $this->db->insert_id();
+	}
+	
+	public function insert_uploaded_files($data = array()){
+
+		$this->db->insert(TABLE_UPLOADED_FILE, $data); 
+		
+		return $this->db->insert_id();
+	}
+	
+	public function insert_log($data = array()){
+
+		$this->db->insert(TABLE_LOG, $data); 
+		
+		return $this->db->insert_id();
+	}
 }

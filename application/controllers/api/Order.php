@@ -88,27 +88,23 @@
 					$mailing_date_id = $this->get('mailing_date_id');
 					
 					$order = $this->orderdata->get_order_details_by_item(array("mailing_date_id" => $mailing_date_id));
-					echo "<pre>";
-					print_r($order);
-					die();
 					
 					if(!empty($order)){	
-						$order = array();
 						
 						// making order
-						$order['mailer'] = $order[0]->mailer;
-						$order['quantity'] = $order[0]->quantity;
-						$order['type'] = $order[0]->type;
-						$order['item'] = $order[0]->item;
-						$order['paper'] = $order[0]->paper;
-						$order['ink'] = $order[0]->ink;
-						$order['envelope'] = $order[0]->envelope;
-						$order['postage'] = $order[0]->postage;
-						$order['per'] = $order[0]->per;
-						$order['total'] = $order[0]->total;
-						$order['proof_pdf'] = $order[0]->proof_pdf;
-						$order['date'] = ($order[0]->date) ? $order[0]->date : '';
-						$order['order_created_date'] = ($order[0]->date) ? $order[0]->date : '';
+						$orders['mailer'] = $order[0]->mailer;
+						$orders['quantity'] = $order[0]->quantity;
+						$orders['type'] = $order[0]->type;
+						$orders['item'] = $order[0]->item;
+						$orders['paper'] = $order[0]->paper;
+						$orders['ink'] = $order[0]->ink;
+						$orders['envelope'] = $order[0]->envelope;
+						$orders['postage'] = $order[0]->postage;
+						$orders['per'] = $order[0]->per;
+						$orders['total'] = $order[0]->total;
+						$orders['proof_pdf'] = $order[0]->proof_pdf;
+						$orders['date'] = ($order[0]->date) ? $order[0]->date : '';
+						$orders['order_created_date'] = ($order[0]->date) ? $order[0]->date : '';
 						
 						// making mailing dates
 						$imprint['fullname'] = $order[0]->firstName.' '.$order[0]->lastName;
@@ -140,12 +136,8 @@
 						
 						$final_arr['imprint'] = $imprint;
 						$final_arr['payment'] = $payment;
-						$final_arr['order'] = $order;
+						$final_arr['order'] = $orders;
 						$final_arr['uploadedFiles'] = $uploaded_files;
-						
-						/*echo "<pre>";
-						print_r($final_arr);
-						die();*/
 						
 						$response = array(
 							"status" => true,
@@ -164,6 +156,82 @@
 			}else{
 				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
 			}
+			
+		}
+		
+		// fetch details for a order
+		public function order_post(){
+			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
+			
+			if($token){
+				$key = get_cookie('reww_secret_key');
+				try{
+					$decoded = JWT::decode($token, $key, array('HS256'));
+					
+					$post_data = $this->input->post();
+					unset($post_data['token']);
+					
+					$uploaded_files = $post_data['uploadedFiles'];
+					unset($post_data['uploadedFiles']);
+					
+					$mailing_dates = $post_data['mailingDates'];
+					unset($post_data['mailingDates']);
+					
+					// save log
+					$log = $post_data['log'];
+					unset($post_data['log']);
+					$log_data['log'] = $log;
+					$log_data['date_added'] = time();
+					
+					if($this->orderdata->insert_log($log_data)){
+						// save order	
+						$order_id = $this->orderdata->insert_order($post_data);
+						if($order_id){
+							// save mailing dates
+							$mailing_dates_arr = json_decode($mailing_dates);
+							if(!empty($mailing_dates_arr)){
+								$cnt = 1;
+								foreach($mailing_dates_arr AS $date){
+									$date['date'] = strtotime($date['date']);
+									$date['order_id'] = $order_id;
+									$date['mailer'] = 'mailer'.$cnt;
+									
+									$cnt++;
+								}
+								
+								if($this->orderdata->insert_mailing_dates($post_data)){
+									// save uploaded files
+									$uploaded_files_arr = json_decode($uploaded_files);
+									if(!empty($uploaded_files_arr)){
+										foreach($uploaded_files_arr AS $key => $file){
+											$file_data['filename'] = $key;
+											$file_data['filepath'] = $file;
+											$file_data['order_id'] = $order_id;
+											
+											$this->orderdata->insert_uploaded_files($file_data);
+										}
+									}
+									$this->set_response(array("status" => true, "message" => "Order made successfully"), REST_Controller::HTTP_OK);
+								}
+							}
+						}
+					}
+										
+				}catch(\Exception $e){					
+					$response = array(
+						"status" => false,
+						"message" => $e->getMessage()
+					);
+					$this->set_response($response, REST_Controller::HTTP_OK);
+				}
+			}else{
+				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
+			}
+			
+		}
+		
+		// send mails after order payment
+		public function post_order_mail_post(){
 			
 		}
 	}
