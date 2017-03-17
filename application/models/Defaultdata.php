@@ -200,5 +200,9 @@ class Defaultdata extends CI_Model {
 		$ci->email->message('It is working. Great!');
 		$ci->email->send();
 	}
+	
+	public function _send_mail(){
+		return true;
+	}
 }
 ?>

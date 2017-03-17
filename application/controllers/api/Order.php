@@ -159,9 +159,10 @@
 			
 		}
 		
-		// fetch details for a order
+		// make order payment
 		public function order_post(){
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
+			echo $token.'||'.get_cookie('reww_secret_key');
 			
 			if($token){
 				$key = get_cookie('reww_secret_key');
@@ -181,7 +182,7 @@
 					$log = $post_data['log'];
 					unset($post_data['log']);
 					$log_data['log'] = $log;
-					$log_data['date_added'] = time();
+					$log_data['date_added'] = time();die("123");
 					
 					if($this->orderdata->insert_log($log_data)){
 						// save order	
@@ -210,7 +211,9 @@
 											
 											$this->orderdata->insert_uploaded_files($file_data);
 										}
-									}
+									}									
+									$this->post_order_payment();
+									
 									$this->set_response(array("status" => true, "message" => "Order made successfully"), REST_Controller::HTTP_OK);
 								}
 							}
@@ -230,9 +233,17 @@
 			
 		}
 		
+		public function post_order_payment(){
+			/* This section includes send emails to admin, payee & others & creating xml & zip file in server "upload" folder. Later zip file file will be removed from "upload" folder & will be sent to other server via ftp functionality in PHP */
+				
+			// create 
+		}
+		
 		// send mails after order payment
 		public function post_order_mail_post(){
-			
+			// call function to send mail after order payment
+			$this->defaultdata->_send_mail();
+			// ends
 		}
 	}
 ?>
