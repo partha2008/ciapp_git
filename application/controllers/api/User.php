@@ -66,7 +66,9 @@
 					$date = time();
 					$token['iat'] = $date;
 					$token['exp'] = $date + 60*60;
-					$token = JWT::encode($token, $this->defaultdata->generatedRandString(10));
+					$super_secret = $this->config->item('encryption_key');
+					
+					$token = JWT::encode($token, $super_secret);
 				
 					$response = array(
 						"status" => true,
@@ -112,25 +114,7 @@
 				$date = time();
 				$token['iat'] = $date;
 				$token['exp'] = $date + 60*60;
-				$super_secret = $this->defaultdata->generatedRandString(20);
-				
-				// delete cookie
-				$cookie = array(
-					'name'   => 'secret_key',
-					'value'  => '',
-					'expire' => '0',
-					'prefix' => 'reww_'
-				);
-				delete_cookie($cookie);
-					
-				// set cookie
-				$cookie = array(
-					'name'   => 'secret_key',
-					'value'  => $super_secret,
-					'expire' => time()+3600,
-					'prefix' => 'reww_',
-				);
-				set_cookie($cookie);
+				$super_secret = $this->config->item('encryption_key');
 				
 				$token = JWT::encode($token, $super_secret);
 			
@@ -186,7 +170,7 @@
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
 			
 			if($token){
-				$key = get_cookie('reww_secret_key');
+				$key = $this->config->item('encryption_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
 					
@@ -226,7 +210,7 @@
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
 			
 			if($token){
-				$key = get_cookie('reww_secret_key');
+				$key = $this->config->item('encryption_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
 					

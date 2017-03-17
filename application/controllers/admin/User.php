@@ -339,7 +339,8 @@
 		}
 		
 		public function hasSamePassword($pass){
-			$user_data = $this->userdata->grab_user_details(array("original_password" => $pass));
+			$username = $this->input->post('old_username');
+			$user_data = $this->userdata->grab_user_details(array("original_password" => $pass, "username" => $username));
 			if(count($user_data) > 0){
 				$this->form_validation->set_message('hasSamePassword', 'Same password given');
 				return false;

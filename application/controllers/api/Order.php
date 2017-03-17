@@ -32,7 +32,7 @@
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
 			
 			if($token){
-				$key = get_cookie('reww_secret_key');
+				$key = $this->config->item('encryption_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
 					
@@ -81,7 +81,7 @@
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
 			
 			if($token){
-				$key = get_cookie('reww_secret_key');
+				$key = $this->config->item('encryption_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
 					
@@ -162,10 +162,9 @@
 		// make order payment
 		public function order_post(){
 			$token = ($this->post('token')) ?  $this->post('token') : (($this->get('token')) ? $this->get('token') : $this->input->request_headers()['x-access-token']);
-			echo $token.'||'.get_cookie('reww_secret_key');
 			
 			if($token){
-				$key = get_cookie('reww_secret_key');
+				$key = $this->config->item('encryption_key');
 				try{
 					$decoded = JWT::decode($token, $key, array('HS256'));
 					
@@ -181,10 +180,14 @@
 					// save log
 					$log = $post_data['log'];
 					unset($post_data['log']);
-					$log_data['log'] = $log;
-					$log_data['date_added'] = time();die("123");
+					$log_data['data'] = $log;
+					$log_data['date_added'] = time();
 					
 					if($this->orderdata->insert_log($log_data)){
+						$post_data['email'] = ($post_data['email'] == 'null') ? '' : $post_data['email'];
+						$post_data['user_id'] = $decoded->id;
+						$post_data['date_added'] = time();
+						
 						// save order	
 						$order_id = $this->orderdata->insert_order($post_data);
 						if($order_id){
@@ -193,29 +196,37 @@
 							if(!empty($mailing_dates_arr)){
 								$cnt = 1;
 								foreach($mailing_dates_arr AS $date){
-									$date['date'] = strtotime($date['date']);
+									$date = (array)$date;
+									$dt_arr = explode("-", $date['date']);
+									$date['date'] = strtotime($dt_arr[2].'-'.$dt_arr[0].'-'.$dt_arr[1]);
 									$date['order_id'] = $order_id;
 									$date['mailer'] = 'mailer'.$cnt;
 									
+									unset($date['$$hashKey']);					
+									
+									$this->orderdata->insert_mailing_dates($date);
+									
 									$cnt++;
-								}
+								}								
 								
-								if($this->orderdata->insert_mailing_dates($post_data)){
-									// save uploaded files
-									$uploaded_files_arr = json_decode($uploaded_files);
-									if(!empty($uploaded_files_arr)){
-										foreach($uploaded_files_arr AS $key => $file){
+								// save uploaded files
+								$uploaded_files_arr = json_decode($uploaded_files);
+								
+								if(!empty($uploaded_files_arr[0])){
+									foreach($uploaded_files_arr AS $file){
+										foreach($file as $key => $value){
 											$file_data['filename'] = $key;
-											$file_data['filepath'] = $file;
+											$file_data['filepath'] = $value;
 											$file_data['order_id'] = $order_id;
 											
 											$this->orderdata->insert_uploaded_files($file_data);
 										}
-									}									
-									$this->post_order_payment();
-									
-									$this->set_response(array("status" => true, "message" => "Order made successfully"), REST_Controller::HTTP_OK);
-								}
+									}
+								}									
+								$this->post_order_payment();
+								
+								$this->set_response(array("status" => true, "message" => "Order made successfully"), REST_Controller::HTTP_OK);
+								
 							}
 						}
 					}

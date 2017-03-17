@@ -154,6 +154,7 @@
 			}else{
 				$cond['order_id'] = $post_data['order_id'];
 				$mail_cond['mailing_date_id'] = $post_data['mailing_date_id'];
+				$order_status = $post_data['order_status'];
 				
 				unset($post_data['order_id']);
 				unset($post_data['mailing_date_id']);
@@ -177,7 +178,11 @@
 					$this->orderdata->update_order($cond, $order_data);
 					$this->orderdata->update_mailing_dates($mail_cond, $mailing_dates_data);
 				}
-				redirect(base_url('admin/order-list'));
+				if($order_status){
+					redirect(base_url('admin/order-list'));
+				}else{
+					redirect(base_url('admin/failed-order-list'));
+				}				
 			}
 		}
 		

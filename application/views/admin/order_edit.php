@@ -328,6 +328,7 @@
 					<div class="panel-body">
 						<input type="hidden" name="order_id" value="<?php echo $order_details->order_id;?>">
 						<input type="hidden" name="mailing_date_id" value="<?php echo $order_details->mailing_date_id;?>">
+						<input type="hidden" name="order_status" value="<?php echo $order_details->ordermode;?>">
 						<button type="submit" class="btn btn-primary">Save Changes</button>
 					</div>
 					
