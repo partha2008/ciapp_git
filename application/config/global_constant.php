@@ -54,7 +54,7 @@
 	$config['smtp']['protocol'] = "smtp";
 	$config['smtp']['smtp_host'] = "smtp.gmail.com";
 	$config['smtp']['smtp_crypto'] = "ssl";
-	$config['smtp']['smtp_port'] = "587";
+	$config['smtp']['smtp_port'] = "465";
 	$config['smtp']['smtp_user'] = "logs@nettrackers.net"; 
 	$config['smtp']['smtp_pass'] = "bldpvudabejjrksd";
 	$config['smtp']['charset'] = "iso-8859-1";

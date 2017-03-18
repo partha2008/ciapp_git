@@ -149,8 +149,27 @@
 				$this->userdata->update_user_details(array("email" => $email), array("password" => $this->defaultdata->getSha256Base64Hash($password), "original_password" => $password));
 				
 				// Send mail to user for password recovery
+				$general_settings = $this->defaultdata->grabSettingData();
+				$admin_data = $this->userdata->grab_user_details(array("role" => '0'));
 				
-				// Ends				
+				$this->data['site_title'] = preg_replace("(^https?://)", "",$general_settings->siteaddress);
+				$this->data['site_logo'] = UPLOAD_LOGO_PATH.$general_settings->logoname;
+				$this->data['site_url'] = $general_settings->siteaddress;
+				$this->data['user_name'] = $user_data[0]->username;
+				$this->data['email_address'] = $user_data[0]->email;
+				$this->data['password'] = $password;
+				
+				$message = $this->load->view('email_template/forget', $this->data, true);
+				$mail_config = array(
+					"from" => $email,
+					"to" => array($admin_data[0]->email),
+					"subject" => $general_settings->sitename.": Password Recovery",
+					"message" => $message
+				);
+				
+				$this->defaultdata->_send_mail($mail_config);
+				// Ends	
+				
 				$response = array(
 					"status" => true,
 					"message" => "Password has been reset. New Password has been generated. An email has been sent to the given email address to get the login details"

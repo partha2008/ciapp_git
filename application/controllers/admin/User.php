@@ -96,7 +96,7 @@
 			$username = $post_data['username'];
 			$old_username = $post_data['old_username'];
 			$password = $post_data['password'];
-			$old_password = $post_data['old_password'];
+			$original_password = $post_data['original_password'];
 			$email = $post_data['email'];
 			$old_email = $post_data['old_email'];
 			$is_active = $post_data['is_active'];
@@ -110,7 +110,7 @@
 			if($password){
 				$this->form_validation->set_rules('password', 'Password', 'trim|min_length[6]|max_length[20]');
 			}else{
-				$password = $old_password;
+				$password = $original_password;
 			}
 			if($email != $old_email){
 				$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique['.TABLE_USER.'.email]');

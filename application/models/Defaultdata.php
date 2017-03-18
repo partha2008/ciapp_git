@@ -180,29 +180,26 @@ class Defaultdata extends CI_Model {
 		return $decrypted;
 	}
 	
-	public function send_email(){
-		$config['protocol'] = "smtp";
-		$config['smtp_host'] = "ssl://smtp.gmail.com";
-		$config['smtp_port'] = "465";
-		$config['smtp_user'] = "blablabla@gmail.com"; 
-		$config['smtp_pass'] = "yourpassword";
-		$config['charset'] = "utf-8";
-		$config['mailtype'] = "html";
-		$config['newline'] = "\r\n";
+	public function _send_mail($config = array()){
+		$this->email->initialize($this->config->item('smtp'));
+		
+		$this->email->from($config['from']);
+		$this->email->to($config['to']);
+		if(array_key_exists("cc", $config)){
+			$this->email->cc($config['cc']);
+		}
+		if(array_key_exists("bcc", $config)){		
+			$this->email->bcc($config['bcc']);
+		}
 
-		$ci->email->initialize($config);
+		$this->email->subject($config['subject']);
+		$this->email->message($config['message']);
 
-		$ci->email->from('blablabla@gmail.com', 'Blabla');
-		$list = array('xxx@gmail.com');
-		$ci->email->to($list);
-		$this->email->reply_to('my-email@gmail.com', 'Explendid Videos');
-		$ci->email->subject('This is an email test');
-		$ci->email->message('It is working. Great!');
-		$ci->email->send();
-	}
-	
-	public function _send_mail(){
-		return true;
+		if($this->email->send()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }
 ?>
