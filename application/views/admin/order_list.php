@@ -20,6 +20,22 @@
 							<div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 							  <div class="row">
 								 <div class="col-sm-12">
+									<?php $sess_notify = $this->session->userdata('has_error');
+									if(isset($sess_notify) & !$sess_notify){?>
+									<div class="alert alert-success alert-dismissable">
+										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+										<?php echo $this->session->userdata('resend_notification');?>
+									</div>
+									<?php } ?>
+									<?php if(isset($sess_notify) & $sess_notify){?>
+									<div class="alert alert-danger alert-dismissable">
+										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+										<?php echo $this->session->userdata('resend_notification');?>
+									</div>
+									<?php } 
+										$this->session->unset_userdata('has_error');
+										$this->session->unset_userdata('resend_notification');						
+									?>								 
 									<form action="<?php echo base_url('admin/'.$redirect);?>" method="GET" role="form">
 										<div id="dataTables-example_filter" class="dataTables_filter">
 											<label>Search by: <input name="searchname" type="search" class="form-control input-sm" placeholder="Name" aria-controls="dataTables-example" value="<?php echo $search_key;?>"></label>

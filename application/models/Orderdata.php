@@ -14,7 +14,7 @@ class Orderdata extends CI_Model {
 			$whr .= " AND (orders.first_name LIKE '%".$like['searchname']."%' OR orders.last_name LIKE '%".$like['searchname']."%')";
 		}
 		
-		$sql = "SELECT mailing_dates.mailing_date_id, mailing_dates.item, mailing_dates.quantity, mailing_dates.proof_pdf, mailing_dates.proofapproved_date, mailing_dates.proofsent_date, mailing_dates.total, mailing_dates.date, mailing_dates.status, orders.order_id, orders.orderid, orders.email, orders.first_name, orders.last_name, orders.date_added FROM mailing_dates LEFT JOIN orders ON mailing_dates.order_id = orders.order_id WHERE orders.status='".$cond['status']."' ".$whr."ORDER BY orders.date_added DESC LIMIT ".$start.", ".$per_page;
+		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM ".TABLE_MAILING_DATE." LEFT JOIN ".TABLE_ORDER." ON ".TABLE_MAILING_DATE.".order_id = ".TABLE_ORDER.".order_id WHERE ".TABLE_ORDER.".status='".$cond['status']."' ".$whr." ORDER BY ".TABLE_ORDER.".date_added DESC LIMIT ".$start.", ".$per_page;
 		
 		$query = $this->db->query($sql);
 		
@@ -24,23 +24,23 @@ class Orderdata extends CI_Model {
 	public function grab_total_order($cond = array(), $limit = array(), $like = array()){
 		$whr = "";
 		if(!empty($like)){
-			$whr .= " AND (orders.first_name LIKE '%".$like['searchname']."%' OR orders.last_name LIKE '%".$like['searchname']."%')";
+			$whr .= " AND (".TABLE_ORDER.".first_name LIKE '%".$like['searchname']."%' OR ".TABLE_ORDER.".last_name LIKE '%".$like['searchname']."%')";
 		}
 		$where = '';
 		if(!empty($cond)){
 			$cnt = 1;
 			foreach($cond AS $key => $val){
 				if($cnt == count($cond)){
-					$where .= 'orders.'.$key."=".$val;
+					$where .= TABLE_ORDER.'.'.$key."=".$val;
 				}else{
-					$where .= 'orders.'.$key."=".$val." AND ";
+					$where .= TABLE_ORDER.'.'.$key."=".$val." AND ";
 				}				
 				
 				$cnt++;
 			}
 		}
 		
-		$sql = "SELECT mailing_dates.mailing_date_id, mailing_dates.item, mailing_dates.quantity, mailing_dates.proof_pdf, mailing_dates.proofapproved_date, mailing_dates.proofsent_date, mailing_dates.total, mailing_dates.date, mailing_dates.status, orders.order_id, orders.orderid, orders.email, orders.first_name, orders.last_name, orders.date_added FROM mailing_dates LEFT JOIN orders ON mailing_dates.order_id = orders.order_id WHERE ".$where.$whr." ORDER BY orders.date_added DESC";
+		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM mailing_dates LEFT JOIN ".TABLE_ORDER." ON mailing_dates.order_id = ".TABLE_ORDER.".order_id WHERE ".$where.$whr." ORDER BY ".TABLE_ORDER.".date_added DESC";
 		
 		$query = $this->db->query($sql);
 		
@@ -48,9 +48,64 @@ class Orderdata extends CI_Model {
 	}
 	
 	public function get_order_details_by_item($cond = array()){
-		$sql = "SELECT *, orders.status as ordermode, orders.order_id as orderids, mailing_dates.status as orderstat FROM `mailing_dates` INNER JOIN `orders` ON mailing_dates.order_id = orders.order_id LEFT JOIN `uploaded_files` ON orders.order_id=uploaded_files.order_id WHERE mailing_dates.mailing_date_id=".$cond['mailing_date_id'];
+		$sql = "SELECT *, ".TABLE_ORDER.".status as ordermode, ".TABLE_ORDER.".order_id as orderids, ".TABLE_MAILING_DATE.".status as orderstat FROM ".TABLE_MAILING_DATE." INNER JOIN ".TABLE_ORDER." ON ".TABLE_MAILING_DATE.".order_id = ".TABLE_ORDER.".order_id LEFT JOIN ".TABLE_UPLOADED_FILE." ON ".TABLE_ORDER.".order_id=".TABLE_UPLOADED_FILE.".order_id WHERE ".TABLE_MAILING_DATE.".mailing_date_id=".$cond['mailing_date_id'];
 		
 		$query = $this->db->query($sql);
+		
+		return $query->result();
+	}
+	
+	public function get_order($cond = array(), $like = array(), $limit = array()){
+		if(!empty($cond)){
+			$this->db->where($cond);
+		}		
+		if(!empty($like)){
+			$this->db->like($like);
+		}
+		if(!empty($limit)){
+			$per_page = $limit[0];
+			$offset = $limit[1];
+			$start = max(0, ( $offset -1 ) * $per_page);
+			$this->db->limit($per_page, $start);
+		}
+		$this->db->order_by('date_added','desc');		
+		$query = $this->db->get(TABLE_ORDER);
+		
+		return $query->result()[0];
+	}
+	
+	public function grab_mailing_dates($cond = array(), $like = array(), $limit = array()){
+		if(!empty($cond)){
+			$this->db->where($cond);
+		}		
+		if(!empty($like)){
+			$this->db->like($like);
+		}
+		if(!empty($limit)){
+			$per_page = $limit[0];
+			$offset = $limit[1];
+			$start = max(0, ( $offset -1 ) * $per_page);
+			$this->db->limit($per_page, $start);
+		}	
+		$query = $this->db->get(TABLE_MAILING_DATE);
+		
+		return $query->result();
+	}
+	
+	public function grab_uploaded_files($cond = array(), $like = array(), $limit = array()){
+		if(!empty($cond)){
+			$this->db->where($cond);
+		}		
+		if(!empty($like)){
+			$this->db->like($like);
+		}
+		if(!empty($limit)){
+			$per_page = $limit[0];
+			$offset = $limit[1];
+			$start = max(0, ( $offset -1 ) * $per_page);
+			$this->db->limit($per_page, $start);
+		}	
+		$query = $this->db->get(TABLE_UPLOADED_FILE);
 		
 		return $query->result();
 	}

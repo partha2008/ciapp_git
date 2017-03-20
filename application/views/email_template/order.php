@@ -9,11 +9,11 @@
                         <tr>
                             <td valign="top" bgcolor="#FFFFFF" style="border: 1px solid #dadada; padding: 30px 30px 20px">
                                 <div style="font-family: Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif; font-size: 14px; line-height: 1.5em; font-weight: normal; color: #222222">
-                                    {{ site_title }},
-                                    <div style="padding: 15px 0px; font-size: 14px; color: #999999">We have received a order. Here is a copy of your order details.</div>
+                                    <?php echo $site_title;?>,
+                                    <div style="padding: 15px 0px; font-size: 14px; color: #999999">We have received an order. Here is a copy of your order details.</div>
 									<div style="padding: 10px 0px;width:100%;text-align:center;"><img style="max-width:100%;height:auto;" 
 									src="https://rewwprintmail.com/app/assets/images/logo1.png" border="0" alt="Logo"></div>
-									{{{ error_msg }}}									
+									<?php echo $error_msg;?>									
                                     <div style="padding: 10px 0px">
                                         
 										<div style="border: 1px solid #F2F2F2; border-left: none">
@@ -31,23 +31,23 @@
 																			<table class="tbl_msg_body_content" cellpadding="2" cellspacing="2" width="100%">
 																				<tr>
 																					<td style="color: #353535;width:30%;">Order #</td>
-																					<td style="color: #999999;width:70%;">{{ order_id }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $order_id;?></td>
 																				</tr>
 																				<tr>
 																					<td style="color: #353535;width:30%;">Name</td>
-																					<td style="color: #999999;width:70%;">{{ sender_email }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $sender_email;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Postal address</td>
-																					<td style="color: #999999;width:70%;">{{ postal_addr }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $postal_addr;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Phone Number</td>
-																					<td style="color: #999999;width:70%;">{{ phone_num }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $phone_num;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Cell Number</td>
-																					<td style="color: #999999;width:70%;">{{ cell_num }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $cell_num;?></td>
 																				</tr>
 																			</table>
 																		</span>
@@ -90,7 +90,7 @@
 																					<td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;width:9%;">Mailing Date</td>
 																				</tr>
 																				<tr><td>&nbsp;</td></tr>
-																				{{{ order_details }}}
+																				<?php echo $order_details;?>
 																				<tr><td>&nbsp;</td></tr>
 																			</table>
 																		</span>
@@ -122,27 +122,19 @@
 																			<table class="tbl_msg_body_content" cellpadding="2" cellspacing="2" width="100%">
 																				<tr>
 																					<td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;width:50%;">Product description</td>
-																					<!--<td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;width:25%;">Quantity</td>
-																					<td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;width:25%;">Price</td>
-																					-->
 																					<td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;width:50%;">Price</td>
 																				</tr>
 																				<tr>
 																					<td>Sub Total</td>
-																					<td>${{ sub_total }}</td>
+																					<td>$<?php echo $sub_total;?></td>
 																				</tr>
-																				<!--<tr>
-																					<td style="color: #353535;">&nbsp;</td>
-																					<td style="color: #999999;">{{ price }}</td>
-																				</tr>-->
 																				<tr>
 																					<td>Item Discount</td>
-																					<td>${{ discount }}</td>
+																					<td>$<?php echo $discount;?></td>
 																				</tr>
 																				<tr>
-																					<!--<td style="color: #c0392b;font-weight:700;" colspan="2">Grand Total</td>-->
 																					<td style="color: #c0392b;font-weight:700;">Grand Total</td>
-																					<td style="color: #c0392b;font-weight:700;">{{ grand_total }}</td>
+																					<td style="color: #c0392b;font-weight:700;"><?php echo $grand_total;?></td>
 																				</tr>
 																			</table>
 																		</span>
@@ -176,43 +168,39 @@
 																				<tr><td>&nbsp;</td></tr>
 																				<tr>
 																					<td style="color: #353535;width:30%;">Order Number</td>
-																					<td style="color: #999999;width:70%;">{{ order_id }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $order_id;?></td>
 																				</tr>
-																				<!--<tr>
-																					<td style="color: #353535;width:30%;">Quantity</td>
-																					<td style="color: #999999;width:70%;">{{ qnty }}</td>
-																				</tr>-->
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Your First Name</td>
-																					<td style="color: #999999;width:70%;">{{ first_name }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $first_name;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Your Last Name</td>
-																					<td style="color: #999999;width:70%;">{{ last_name }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $last_name;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Company Name</td>
-																					<td style="color: #999999;width:70%;">{{ comp_name }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $comp_name;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Website</td>
-																					<td style="color: #999999;width:70%;">{{ website }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $website;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Email Address</td>
-																					<td style="color: #999999;width:70%;">{{ email }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $email;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Telephone</td>
-																					<td style="color: #999999;width:70%;">{{ tel_num }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $tel_num;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Special Instructions</td>
-																					<td style="color: #999999;width:70%;">{{ instruct }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $instruct;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Return Address</td>
-																					<td style="color: #999999;width:70%;">{{ return_addr }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $return_addr;?></td>
 																				</tr>
 																			</table>
 																		</span>
@@ -244,7 +232,7 @@
 																			<table class="tbl_msg_body_content" cellpadding="2" cellspacing="2" width="100%">
 																				<tr><td style="font-weight:700;color:#fff;background-color:#a82700;padding:10px;" colspan="2">Mailling Dates</td></tr>
 																				<tr><td>&nbsp;</td></tr>
-																				{{{ mailing_date }}}
+																				<?php echo $mailing_date;?>
 																			</table>
 																		</span>
 																	</div>
@@ -277,23 +265,23 @@
 																				<tr><td>&nbsp;</td></tr>
 																				<tr>
 																					<td style="color: #353535;width:30%;">Logo</td>
-																					<td style="color: #999999;width:70%;">{{ logo }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $logo;?></td>
 																				</tr>
 																				<tr>
 																					<td style="color: #353535;width:30%;">Mailing List</td>
-																					<td style="color: #999999;width:70%;">{{ mailing_list }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $mailing_list;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Letter</td>
-																					<td style="color: #999999;width:70%;">{{ letter }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $letter;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Signature</td>
-																					<td style="color: #999999;width:70%;">{{ signature }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $signature;?></td>
 																				</tr>
 																				<tr>
 																					<td style="vertical-align:top;color: #353535;width:30%;">Other Files</td>
-																					<td style="color: #999999;width:70%;">{{ other_files }}</td>
+																					<td style="color: #999999;width:70%;"><?php echo $other_files;?></td>
 																				</tr>
 																			</table>
 																		</span>
