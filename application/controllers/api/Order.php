@@ -19,6 +19,7 @@
 			parent::__construct();
 			
 			$this->load->model('orderdata');
+			$this->load->model('userdata');
 
 			// Configure limits on our controller methods
 			// Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
@@ -223,7 +224,7 @@
 										}
 									}
 								}									
-								$this->post_order_payment();
+								$this->post_order_payment($order_id);
 								
 								$this->set_response(array("status" => true, "message" => "Order made successfully"), REST_Controller::HTTP_OK);
 								
@@ -242,19 +243,117 @@
 				$this->set_response(array("status" => false, "message" => "Token not found"), REST_Controller::HTTP_OK);
 			}
 			
-		}
-		
-		public function post_order_payment(){
-			/* This section includes send emails to admin, payee & others & creating xml & zip file in server "upload" folder. Later zip file file will be removed from "upload" folder & will be sent to other server via ftp functionality in PHP */
-				
-			// create 
-		}
+		} 
 		
 		// send mails after order payment
-		public function post_order_mail_post(){
-			// call function to send mail after order payment
-			$this->defaultdata->_send_mail();
-			// ends
+		public function post_order_payment($order_id){
+			/* This section includes send emails to admin, payee & others & creating xml & zip file in server "upload" folder. Later zip file file will be removed from "upload" folder & will be sent to other server via ftp functionality in PHP */
+			
+			$general_settings = $this->defaultdata->grabSettingData();
+			$admin_data = $this->userdata->grab_user_details(array("role" => '0'));
+			
+			$data['site_title'] = preg_replace("(^https?://)", "",$general_settings->siteaddress);
+			$data['site_logo'] = UPLOAD_LOGO_PATH.$general_settings->logoname;
+			$data['site_url'] = $general_settings->siteaddress;
+			
+			$order_data = $this->orderdata->get_order(array("order_id" => $order_id));
+			$user_data = $this->userdata->grab_user_details(array("user_id" => $order_data->user_id));
+			$mailing_dates_data = $this->orderdata->grab_mailing_dates(array("order_id" => $order_id));
+			$uploaded_files_data = $this->orderdata->grab_uploaded_files(array("order_id" => $order_id));
+			
+			$logo = '';
+			$mailinglist = '';
+			$letter = '';
+			$signature = '';
+			$other_files = '';
+			
+			if(!empty($uploaded_files_data)){
+				foreach($uploaded_files_data AS $key => $val){
+					
+					if($val->filename == 'logo'){
+						$logo = $val->filepath;
+					}					
+					if($val->filename == 'mailing_list'){
+						$mailinglist = $val->filepath;
+					}					
+					if($val->filename == 'letter'){
+						$letter = $val->filepath;
+					}
+					if($val->filename == 'signature'){
+						$signature = $val->filepath;
+					}					
+					if($val->filename == 'otherfiles'){
+						$other_files = $val->filepath;
+					}
+				}
+				
+			}
+			
+			if($order_data->status){
+				$error_msg = '';
+			}else{
+				$error_msg = '<div style="font-family: Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif; font-size: 14px; line-height: 2em; color: #C0392B; text-align:center;font-weight:700;">This order has been declined ( '.$order_data->transaction_return_text.' )</div>';
+			}
+			
+			$data['error_msg'] = $error_msg;
+			
+			// First Section
+			$data['order_id'] = $order_data->orderid;
+			$data['sender_email'] = $user_data[0]->email;
+			$data['postal_addr'] = $order_data->billingAddress;
+			$data['phone_num'] = $order_data->phone_num;
+			$data['cell_num'] = $order_data->cell_num;
+			
+			// Order Details
+			$mailing_dates = '';
+			$mailing_list = '';
+			$sub_total = 0;
+			if(!empty($mailing_dates_data)){
+				foreach($mailing_dates_data AS $key => $date){
+					$mailer_cnt = str_replace('mailer', '', $date->mailer);		
+					$mailing_dates .= '<tr><td style="color: #353535;">Mailer #'.$mailer_cnt.'</td><td style="color: #999999;">'.$date->item.'</td><td style="color: #999999;">'.$date->quantity.'</td><td style="color: #999999;">'.$date->type.'</td><td style="color: #999999;">'.$date->paper.'</td><td style="color: #999999;">'.$date->ink.'</td><td style="color: #999999;">'.$date->envelope.'</td><td style="color: #999999;">'.$date->postage.'</td><td style="color: #999999;">'.$date->per.'</td><td style="color: #999999;">$'.number_format($date->total, 2).'</td><td style="color: #999999;">'.date("m-d-Y", $date->date).'</td></tr>';
+					
+					$mailing_list .= '<tr><td style="color: #353535;width:30%;">Mailer #'.$mailer_cnt.': '.$date->type.'</td><td style="color: #999999;width:70%;">'.date("m-d-Y", $date->date).'</td></tr>';
+					
+					$sub_total = $sub_total+$date->total;
+				}
+			}
+			$data['order_details'] = $mailing_dates;
+			
+			// Product Description
+			$data['sub_total'] = number_format($sub_total, 2);
+			$data['discount'] = number_format(($sub_total - $order_data->grand_total), 2);
+			$data['grand_total'] = '$'.number_format($order_data->grand_total, 2);
+			
+			// Imprint
+			$data['first_name'] = $order_data->first_name;
+			$data['last_name'] = $order_data->last_name;
+			$data['comp_name'] = $order_data->comp_name;
+			$data['website'] = $order_data->website;
+			$data['email'] = $order_data->email;
+			$data['tel_num'] = $order_data->tel_num;
+			$data['instruct'] = $order_data->instruct;
+			$data['return_addr'] = $order_data->return_addr;
+			
+			// Mailing Dates
+			$data['mailing_date'] = $mailing_list;
+			
+			// Text & Images
+			$data['logo'] = $logo;
+			$data['mailing_list'] = $mailinglist;
+			$data['letter'] = $letter;
+			$data['signature'] = $signature;
+			$data['other_files'] = $other_files;
+			
+			$message = $this->load->view('email_template/order', $data, true);
+			$mail_config = array(
+				"from" => $admin_data[0]->email,
+				"to" => array($user_data[0]->email),
+				"subject" => $general_settings->sitename.": Letter and Postcard Mailing Services Order Receipt",
+				"message" => $message
+			);
+			
+			$this->defaultdata->_send_mail($mail_config);
 		}
 	}
 ?>
