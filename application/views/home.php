@@ -80,7 +80,7 @@
 		</nav>
 
 
-		<div class="fh5co-cover fh5co-cover-style-2 js-full-height" data-stellar-background-ratio="0.5" data-next="yes"  style="background-image: url(images/full_1.jpg);">
+		<div class="fh5co-cover fh5co-cover-style-2 js-full-height" data-stellar-background-ratio="0.5" data-next="yes"  style="background-image: url(./assets/images/full_1.jpg);">
 		  	<span class="scroll-btn wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.4s">
 				<a href="#">
 					<span class="mouse"><span></span></span>
@@ -114,7 +114,7 @@
 			</div>
 			<div class="fh5co-projects">
 				<ul>
-					<li class="wow fadeInUp" style="background-image: url(images/full_4.jpg);" data-wow-duration="1s" data-wow-delay="1.4s" data-stellar-background-ratio="0.5">
+					<li class="wow fadeInUp" style="background-image: url(./assets/images/full_4.jpg);" data-wow-duration="1s" data-wow-delay="1.4s" data-stellar-background-ratio="0.5">
 						<a href="#">
 							<div class="fh5co-overlay"></div>
 							<div class="container">
@@ -129,7 +129,7 @@
 							</div>
 						</a>
 					</li>
-					<li class="wow fadeInUp" style="background-image: url(images/full_2.jpg);" data-wow-duration="1s" data-wow-delay="1.7s" data-stellar-background-ratio="0.5">
+					<li class="wow fadeInUp" style="background-image: url(./assets/images/full_2.jpg);" data-wow-duration="1s" data-wow-delay="1.7s" data-stellar-background-ratio="0.5">
 						<a href="#">
 							<div class="fh5co-overlay"></div>
 							<div class="container">
@@ -144,7 +144,7 @@
 							</div>
 						</a>
 					</li>
-					<li class="wow fadeInUp" style="background-image: url(images/full_1.jpg);" data-wow-duration="1s" data-wow-delay="2s" data-stellar-background-ratio="0.5">
+					<li class="wow fadeInUp" style="background-image: url(./assets/images/full_1.jpg);" data-wow-duration="1s" data-wow-delay="2s" data-stellar-background-ratio="0.5">
 						<a href="#">
 							<div class="fh5co-overlay"></div>
 							<div class="container">
@@ -177,7 +177,7 @@
 							<div class="fh5co-post-image">
 								<div class="fh5co-overlay"></div>	
 								<div class="fh5co-category"><a href="#">Tutorial</a></div>	
-								<img src="images/img_same_dimension_2.jpg" alt="Image" class="img-responsive">
+								<img src="./assets/images/img_same_dimension_2.jpg" alt="Image" class="img-responsive">
 							</div>
 							<div class="fh5co-post-text">
 								<h3><a href="#">How to Create Cards</a></h3>
@@ -194,7 +194,7 @@
 							<div class="fh5co-post-image">
 								<div class="fh5co-overlay"></div>	
 								<div class="fh5co-category"><a href="#">Health</a></div>	
-								<img src="images/img_same_dimension_3.jpg" alt="Image" class="img-responsive">
+								<img src="./assets/images/img_same_dimension_3.jpg" alt="Image" class="img-responsive">
 							</div>
 							<div class="fh5co-post-text">
 								<h3><a href="#">Drinking Ginger and Lemon Tea</a></h3>
@@ -212,7 +212,7 @@
 							<div class="fh5co-post-image">
 								<div class="fh5co-overlay"></div>	
 								<div class="fh5co-category"><a href="#">Tips</a></div>	
-								<img src="images/img_same_dimension_4.jpg" alt="Image" class="img-responsive">
+								<img src="./assets/images/img_same_dimension_4.jpg" alt="Image" class="img-responsive">
 							</div>
 							<div class="fh5co-post-text">
 								<h3><a href="#">4 Easy Steps to Create a Soup</a></h3>
@@ -234,7 +234,7 @@
 			</div>
 		</div>
 
-		<div class="fh5co-features-style-1" style="background-image: url(images/full_4.jpg);" data-stellar-background-ratio="0.5">
+		<div class="fh5co-features-style-1" style="background-image: url(./assets/images/full_4.jpg);" data-stellar-background-ratio="0.5">
 			<div class="fh5co-overlay"></div>
 			<div class="container" style="z-index: 3; position: relative;">
 				<div class="row p-b">
@@ -400,7 +400,7 @@
 				<div class="row">
 					<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".5s">
 						<a href="#" class="link-block">
-							<figure><img src="images/img_same_dimension_1.jpg" alt="Image" class="img-responsive img-rounded"></figure>
+							<figure><img src="./assets/images/img_same_dimension_1.jpg" alt="Image" class="img-responsive img-rounded"></figure>
 							<h3>Responsive Layout</h3>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
 							<p><a href="#" class="btn btn-primary btn-sm">Learn More</a></p>
@@ -408,7 +408,7 @@
 					</div>
 					<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".8s">
 						<a href="#" class="link-block">
-							<figure><img src="images/img_same_dimension_2.jpg" alt="Image" class="img-responsive img-rounded"></figure>
+							<figure><img src="./assets/images/img_same_dimension_2.jpg" alt="Image" class="img-responsive img-rounded"></figure>
 							<h3>Retina Ready</h3>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
 							<p><a href="#" class="btn btn-primary btn-sm">Learn More</a></p>
@@ -417,7 +417,7 @@
 					<div class="clearfix visible-sm-block"></div>
 					<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1.1s">
 						<a href="#" class="link-block">
-							<figure><img src="images/img_same_dimension_3.jpg" alt="Image" class="img-responsive img-rounded"></figure>
+							<figure><img src="./assets/images/img_same_dimension_3.jpg" alt="Image" class="img-responsive img-rounded"></figure>
 							<h3>Creative UI Design</h3>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
 							<p><a href="#" class="btn btn-primary btn-sm">Learn More</a></p>
@@ -425,7 +425,7 @@
 					</div>
 					<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1.4s">
 						<a href="#" class="link-block">
-							<figure><img src="images/img_same_dimension_4.jpg" alt="Image" class="img-responsive img-rounded"></figure>
+							<figure><img src="./assets/images/img_same_dimension_4.jpg" alt="Image" class="img-responsive img-rounded"></figure>
 							<h3>Responsive Layout</h3>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
 							<p><a href="#" class="btn btn-primary btn-sm">Learn More</a></p>
@@ -435,7 +435,7 @@
 			</div>
 		</div>
 
-		<div class="fh5co-counter-style-2" style="background-image: url(images/full_2.jpg);" data-stellar-background-ratio="0.5">
+		<div class="fh5co-counter-style-2" style="background-image: url(./assets/images/full_2.jpg);" data-stellar-background-ratio="0.5">
 			<div class="fh5co-overlay"></div>
 			<div class="container">
 				<div class="fh5co-section-content-wrap">
@@ -482,7 +482,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.1s">
 							<div class="fh5co-name">
-								<img src="images/person_5.jpg" alt="">
+								<img src="./assets/images/person_5.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Chris Clark</h3>
 									<span class="fh5co-company">XYZ Inc.</span>
@@ -496,7 +496,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.4s">
 							<div class="fh5co-name">
-								<img src="images/person_4.jpg" alt="">
+								<img src="./assets/images/person_4.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Ian Stewart</h3>
 									<span class="fh5co-company">XYZ Inc.</span>
@@ -513,7 +513,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.7s">
 							<div class="fh5co-name">
-								<img src="images/person_3.jpg" alt="">
+								<img src="./assets/images/person_3.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Mitch Silk</h3>
 									<span class="fh5co-company">XYZ Inc.</span>
@@ -530,7 +530,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="2s">
 							<div class="fh5co-name">
-								<img src="images/person_1.jpg" alt="">
+								<img src="./assets/images/person_1.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Beth Glasgow</h3>
 									<span class="fh5co-company">XYZ Inc.</span>
@@ -547,7 +547,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="2.3s">
 							<div class="fh5co-name">
-								<img src="images/person_2.jpg" alt="">
+								<img src="./assets/images/person_2.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Rob Smith</h3>
 									<span class="fh5co-company">XYZ Inc.</span>
@@ -562,7 +562,7 @@
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="fh5co-testimonial-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="2.6s">
 							<div class="fh5co-name">
-								<img src="images/person_6.jpg" alt="">
+								<img src="./assets/images/person_6.jpg" alt="">
 								<div class="fh5co-meta">
 									<h3>Colleen Bass</h3>
 									<span class="fh5co-company">XYZ Inc.</span>

@@ -58,7 +58,24 @@
 				if($last_insert_id){
 					
 					// send mail to user
+					$general_settings = $this->defaultdata->grabSettingData();
+					$admin_data = $this->userdata->grab_user_details(array("role" => '0'));
 					
+					$this->data['site_title'] = preg_replace("(^https?://)", "",$general_settings->siteaddress);
+					$this->data['site_logo'] = UPLOAD_LOGO_PATH.$general_settings->logoname;
+					$this->data['site_url'] = $general_settings->siteaddress;
+					$this->data['user_name'] = $username;
+					$this->data['email_address'] = $email;
+					
+					$message = $this->load->view('email_template/register', $this->data, true);
+					$mail_config = array(
+						"from" => $admin_data[0]->email,
+						"to" => array($email),
+						"subject" => $general_settings->sitename.": New user Registration",
+						"message" => $message
+					);
+					
+					$this->defaultdata->_send_mail($mail_config);
 					// Ends
 					
 					$token['id'] = $last_insert_id;
