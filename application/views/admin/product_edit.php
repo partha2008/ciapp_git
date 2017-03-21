@@ -84,10 +84,10 @@
 										<div class="form-group">
 											<label class="control-label">Status</label>
 											<label class="radio-inline">
-												<input type="radio" name="is_active" value="1" <?php if(isset($cat_details->is_active)){if($cat_details->is_active){echo 'checked';}}else{echo 'checked';}?> >Active
+												<input type="radio" name="is_active" value="1" <?php if(isset($product_details->is_active)){if($product_details->is_active){echo 'checked';}}else{echo 'checked';}?> >Active
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="is_active" value="0" <?php if(isset($cat_details->is_active)){if(!$cat_details->is_active){echo 'checked';}}else{echo 'checked';}?> >Inactive
+												<input type="radio" name="is_active" value="0" <?php if(isset($product_details->is_active)){if(!$product_details->is_active){echo 'checked';}}else{echo 'checked';}?> >Inactive
 											</label>
 										</div>
 										<input type="hidden" name="code" value="<?php echo $product_details->code;?>">
