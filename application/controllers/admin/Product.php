@@ -99,7 +99,11 @@ class Product extends CI_Controller{
 			$this->form_validation->set_rules('price[]', 'Price', 'trim|required', array('required' => 'All prices must be given'));		
 		}
 		
+		$price_arr = $post_data['price'];
+		unset($post_data['price']);
+		
 		$this->session->unset_userdata($post_data);
+		$post_data['price'] = $price_arr;
 		if($this->form_validation->run() == FALSE)
 		{	
 			$this->session->set_userdata($post_data);
@@ -143,8 +147,6 @@ class Product extends CI_Controller{
 				"date_added" => time()
 			);
 			$this->productdata->insert_product($data);
-			
-			$this->session->set_userdata('has_error', false);
 			
 			redirect(base_url('admin/product-list'));
 		}
@@ -238,8 +240,6 @@ class Product extends CI_Controller{
 			);
 			$cond = array("code" => $post_data['code']);
 			$this->productdata->update_product($cond, $data);
-			
-			$this->session->set_userdata('has_error', false);
 			
 			redirect(base_url('admin/product-list'));
 		}
