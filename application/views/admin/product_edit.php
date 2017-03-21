@@ -53,7 +53,7 @@
 										<div class="form-group">
 											<label class="control-label">Upload Product</label>
 											<input type="file" name="product">
-											<?php if($product_details->imagename){ ?>
+											<?php if($product_details->imagename && file_exists(UPLOAD_RELATIVE_PRODUCT_PATH.$product_details->imagename)){ ?>
 											<img src="<?php echo UPLOAD_PRODUCT_PATH.$product_details->imagename;?>" width="80">
 											<?php } ?>
 											<input type="hidden" name="hidden_product" value="<?php echo $product_details->imagename;?>">
