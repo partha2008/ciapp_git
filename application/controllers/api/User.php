@@ -50,7 +50,7 @@
 					"email" => $email,
 					"password" => $this->defaultdata->getSha256Base64Hash($password),
 					"original_password" => $password,
-					"is_active" => 1,
+					"is_active" => '1',
 					"date_added" => time()			
 				);
 				
@@ -139,9 +139,9 @@
 					"status" => true,
 					"message" => "You have been successfully authenticated",
 					"data" => array(
-						"username" => $this->post('username'),
-						"email" => $this->post('email'),
-						"user_discount" => 0,
+						"username" => $user_data[0]->username,
+						"email" => $user_data[0]->email,
+						"user_discount" => $user_data[0]->user_discount,
 						"token" => $token
 					)
 				);

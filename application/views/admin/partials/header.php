@@ -1,7 +1,7 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="<?php echo base_url('admin/dashboard');?>"><img src="<?php echo UPLOAD_LOGO_PATH.$general_settings->logoname;?>" width="230" height="50"></a>
+			<a class="navbar-brand" href="<?php echo base_url('admin/dashboard');?>"><img src="<?php echo UPLOAD_LOGO_PATH.$general_settings->logoname.'?v='.time();?>" width="230" height="50"></a>
 		</div>
 		<!-- /.navbar-header -->
 

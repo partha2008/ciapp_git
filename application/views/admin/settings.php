@@ -48,7 +48,7 @@
 												<input class="form-control" type="file" name="logo">
 											</div>
 											<div class="form-group">
-												<img src="<?php echo $settings_data->logopathname;?>" width="230">
+												<img src="<?php echo UPLOAD_LOGO_PATH.$settings_data->logoname.'?v='.time();?>" width="230">
 											</div>
 
 											<input type="hidden" name="settings_id" value="<?php echo $settings_data->settings_id;?>">

@@ -181,10 +181,10 @@
 					$file_ext = pathinfo($filename, PATHINFO_EXTENSION);
 					$file_name = 'logo'.'.'.$file_ext;
 					
-					array_map('unlink', glob(UPLOAD_LOGO_PATH."*"));
-					if(move_uploaded_file($_FILES['logo']['tmp_name'], UPLOAD_LOGO_PATH.$file_name)){
+					array_map('unlink', glob(UPLOAD_RELATIVE_LOGO_PATH."*"));
+					if(move_uploaded_file($_FILES['logo']['tmp_name'], UPLOAD_RELATIVE_LOGO_PATH.$file_name)){
 						$data['logoname'] = $file_name;
-						$data['logopathname'] = UPLOAD_LOGO_PATH.$file_name;
+						$data['logopathname'] = UPLOAD_RELATIVE_LOGO_PATH.$file_name;
 					}
 				}
 				

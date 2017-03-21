@@ -307,7 +307,10 @@
 			// Order Details
 			$mailing_dates = '';
 			$mailing_list = '';
+			$sec_mailing_list = '';
+			$item_orders = '';
 			$sub_total = 0;
+			
 			if(!empty($mailing_dates_data)){
 				foreach($mailing_dates_data AS $key => $date){
 					$mailer_cnt = str_replace('mailer', '', $date->mailer);		
@@ -315,9 +318,16 @@
 					
 					$mailing_list .= '<tr><td style="color: #353535;width:30%;">Mailer #'.$mailer_cnt.': '.$date->type.'</td><td style="color: #999999;width:70%;">'.date("m-d-Y", $date->date).'</td></tr>';
 					
+					$sec_mailing_list .= 'Mailer #'.$mailer_cnt.': '.date('m-d-Y', $date->date).'<br>';
+					
+					$item_orders .= 'Item Description: Mailer #'.$mailer_cnt.': '.$date->item.'<br>Item Quantity: '.$date->quantity.'<br>Item Price: $'.$date->total.'<br><br>';
+					
 					$sub_total = $sub_total+$date->total;
 				}
 			}
+			$item_orders .= 'Item Discount: $'.number_format(($sub_total - $order_data->grand_total), 2).'<br><br>';
+			$item_orders .= 'Item Net: $'.number_format($order_data->grand_total, 2);
+	
 			$data['order_details'] = $mailing_dates;
 			
 			// Product Description
@@ -346,14 +356,80 @@
 			$data['other_files'] = $other_files;
 			
 			$message = $this->load->view('email_template/order', $data, true);
-			$mail_config = array(
+			
+			// send mail to user
+			$mail_config_user = array(
 				"from" => $admin_data[0]->email,
 				"to" => array($user_data[0]->email),
 				"subject" => $general_settings->sitename.": Letter and Postcard Mailing Services Order Receipt",
 				"message" => $message
-			);
+			);			
+			$this->defaultdata->_send_mail($mail_config_user);
 			
-			$this->defaultdata->_send_mail($mail_config);
+			// send mail to admin
+			$mail_config_admin = array(
+				"from" => $admin_data[0]->email,
+				"to" => array($admin_data[0]->email),
+				"cc" => array("swagata@nettrackers.net"),
+				"subject" => $general_settings->sitename.": Letter and Postcard Mailing Services Order Receipt",
+				"message" => $message
+			);			
+			$this->defaultdata->_send_mail($mail_config_admin);
+			
+			// send text mail to admin
+			$txt_msg = '';	
+			$txt_msg .='
+				CUSTOMER INFORMATION
+				<br>
+				---------------------------------------
+				<br>
+				Customer Name: '.$order_data->firstName . ' ' . $order_data->lastName.'<br>
+				Contact Phone: '.$order_data->phone_num.'<br><br>		
+
+				SHIPPING INFORMATION
+				<br>
+				---------------------------------------
+				<br>
+				Name: '.$order_data->first_name.' '.$order_data->last_name.'<br>
+				Company: '.$order_data->comp_name.'<br>
+				Email: '.$order_data->email.'<br>
+				Phone: '.$order_data->tel_num.'<br>
+				Website: '.$order_data->website.'<br>
+				Special Instructions: '.$order_data->instruct.'<br>
+				Return Address: '.$order_data->return_addr.'<br><br>
+
+				MAILER DATE INFORMATION
+				<br>
+				--------------------------------------
+				<br>
+				'.$sec_mailing_list.'
+				<br>
+				ITEMS ORDERED
+				<br>
+				---------------------------------------
+				<br>
+				'.$item_orders.'
+				<br><br>
+				IMPRINT DETAILS
+				<br>
+				---------------------------------------
+				<br>
+				Name: '.$order_data->first_name.' '.$order_data->last_name.'<br>
+				Company: '.$order_data->comp_name.'<br>
+				Email: '.$order_data->email.'<br>
+				Phone: '.$order_data->tel_num.'<br>
+				Website: '.$order_data->website.'<br>
+				Special Instructions: '.$order_data->instruct. '<br>
+				Return Address: '.$order_data->return_addr. '<br>
+			';
+			
+			$txt_mail_config_admin = array(
+				"from" => $admin_data[0]->email,
+				"to" => array($admin_data[0]->email),
+				"subject" => $general_settings->sitename.": Letter and Postcard Mailing Services Order Receipt",
+				"message" => $txt_msg
+			);			
+			$this->defaultdata->_send_mail($txt_mail_config_admin);
 		}
 	}
 ?>
