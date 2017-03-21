@@ -14,7 +14,7 @@ class Orderdata extends CI_Model {
 			$whr .= " AND (orders.first_name LIKE '%".$like['searchname']."%' OR orders.last_name LIKE '%".$like['searchname']."%')";
 		}
 		
-		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM ".TABLE_MAILING_DATE." LEFT JOIN ".TABLE_ORDER." ON ".TABLE_MAILING_DATE.".order_id = ".TABLE_ORDER.".order_id WHERE ".TABLE_ORDER.".status='".$cond['status']."' ".$whr." ORDER BY ".TABLE_ORDER.".date_added DESC LIMIT ".$start.", ".$per_page;
+		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM ".TABLE_MAILING_DATE." LEFT JOIN ".TABLE_ORDER." ON ".TABLE_MAILING_DATE.".order_id = ".TABLE_ORDER.".order_id WHERE ".TABLE_ORDER.".status='".$cond['status']."' ".$whr." LIMIT ".$start.", ".$per_page;
 		
 		$query = $this->db->query($sql);
 		

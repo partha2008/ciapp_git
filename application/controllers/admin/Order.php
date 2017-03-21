@@ -127,16 +127,17 @@
 		public function checkFileExtension(){
 			if($_FILES['item_proof_pdf']['error'] == 0){
 				$ext = pathinfo($_FILES['item_proof_pdf']['name'], PATHINFO_EXTENSION);
-				if($ext != 'pdf' || $ext != 'PDF'){
+				if($ext != 'pdf' && $ext != 'PDF'){
 					$this->form_validation->set_message('checkFileExtension', 'Invalid file extension. Only PDF file is allowed');
 					return false;
-				}else{
+				}else{					
 					return true;
 				}					
 			}
 		}
 		
 		public function edit_order(){
+			
 			$post_data = $this->input->post();
 			
 			$this->load->library('form_validation');
@@ -174,9 +175,13 @@
 							$index = substr($key, 5);
 							$mailing_dates_data[$index] = $data;
 						}						
-					}
-					
+					}					
 					$this->orderdata->update_order($cond, $order_data);
+					
+					$file_name = $this->defaultdata->generatedRandString().'.pdf';					
+					if(move_uploaded_file($_FILES['item_proof_pdf']['tmp_name'], UPLOAD_RELATIVE_ORDER_PATH.$file_name)){
+						$mailing_dates_data['proof_pdf'] = $file_name;
+					}					
 					$this->orderdata->update_mailing_dates($mail_cond, $mailing_dates_data);
 				}
 				if($order_status){

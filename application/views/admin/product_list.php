@@ -58,7 +58,7 @@
 											 <td><?php echo $list->productname;?></td>		 
 											 <td><?php echo $list->code;?></td>		 
 											 <td><?php echo $list->categoryname;?></td>	
-											 <?php if($list->imagepathname){ ?>
+											 <?php if($list->imagepathname && file_exists(UPLOAD_RELATIVE_PRODUCT_PATH.$list->imagename)){ ?>
 											 <td><img src="<?php echo UPLOAD_PRODUCT_PATH.$list->imagename;?>" width="80"></td>	
 											 <?php }else{ ?>
 											 <td>&nbsp;</td>

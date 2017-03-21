@@ -288,7 +288,7 @@
 										</div>
 										<div class="form-group">
 											<label>Proof Sent Date</label>
-											<input id="proofsent_date" class="form-control" type="text" name="item_proofsent_date" value="<?php echo date("m-d-Y", $order_details->proofsent_date);?>" placeholder="mm-dd-yyyy">
+											<input id="proofsent_date" class="form-control" type="text" name="item_proofsent_date" value="<?php echo ($order_details->proofsent_date) ? date("m-d-Y", $order_details->proofsent_date) : '';?>" placeholder="mm-dd-yyyy">
 										</div>
 										<div class="form-group">
 											<label>Actual Mail Date</label>
@@ -304,13 +304,13 @@
 										</div>
 										<div class="form-group">
 											<label>Proof Approved Date</label>
-											<input id="proofapproved_date" class="form-control" type="text" name="item_proofapproved_date" value="<?php echo date("m-d-Y", $order_details->proofapproved_date);?>" placeholder="mm-dd-yyyy">
+											<input id="proofapproved_date" class="form-control" type="text" name="item_proofapproved_date" value="<?php echo ($order_details->proofapproved_date) ? date("m-d-Y", $order_details->proofapproved_date) : '';?>" placeholder="mm-dd-yyyy">
 										</div>
 										<div class="form-group">
 											<label>Proof PDF</label>
 											<input type="file" name="item_proof_pdf">
 											<?php if($order_details->proof_pdf){ ?>
-												<p><a href="<?php echo $order_details->proof_pdf;?>" download>Download</a></p>
+												<p><a href="<?php echo UPLOAD_ORDER_PATH.$order_details->proof_pdf;?>" download>Download</a></p>
 											<?php } ?>
 										</div>
 									</div>
@@ -326,7 +326,7 @@
 					<!-- /.col-lg-12 -->
 					
 					<div class="panel-body">
-						<input type="hidden" name="order_id" value="<?php echo $order_details->order_id;?>">
+						<input type="hidden" name="order_id" value="<?php echo $order_details->orderids;?>">
 						<input type="hidden" name="mailing_date_id" value="<?php echo $order_details->mailing_date_id;?>">
 						<input type="hidden" name="order_status" value="<?php echo $order_details->ordermode;?>">
 						<button type="submit" class="btn btn-primary">Save Changes</button>

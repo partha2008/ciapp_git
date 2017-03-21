@@ -93,10 +93,12 @@ define('PAGINATION_PER_PAGE', 10);
 define('UPLOAD_PATH', ROOT_URL.'uploads/');
 define('UPLOAD_LOGO_PATH', UPLOAD_PATH.'logo/');
 define('UPLOAD_PRODUCT_PATH', UPLOAD_PATH.'product/');
+define('UPLOAD_ORDER_PATH', UPLOAD_PATH.'order/');
 
 define('UPLOAD_RELATIVE_PATH', 'uploads/');
 define('UPLOAD_RELATIVE_LOGO_PATH', UPLOAD_RELATIVE_PATH.'logo/');
 define('UPLOAD_RELATIVE_PRODUCT_PATH', UPLOAD_RELATIVE_PATH.'product/');
+define('UPLOAD_RELATIVE_ORDER_PATH', UPLOAD_RELATIVE_PATH.'order/');
 
 define('TABLE_SETTINGS', 'settings');
 define('TABLE_CMS', 'cms');
