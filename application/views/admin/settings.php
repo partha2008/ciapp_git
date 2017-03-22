@@ -53,6 +53,7 @@
 
 											<input type="hidden" name="settings_id" value="<?php echo $settings_data->settings_id;?>">
 											<input type="hidden" name="logopathname" value="<?php echo $settings_data->logopathname;?>">
+											<input type="hidden" name="logoname" value="<?php echo $settings_data->logoname;?>">
 											
 											<button type="submit" class="btn btn-primary">Save Changes</button>
 										</form>

@@ -139,6 +139,9 @@
 		public function edit_order(){
 			
 			$post_data = $this->input->post();
+			/*echo "<pre>";
+			print_r($post_data);
+			die();*/
 			
 			$this->load->library('form_validation');
 			
@@ -167,15 +170,20 @@
 							$index = substr($key, 7);
 							if($index == 'date'){
 								$index = 'date_added';
-								$data = strtotime($data);
+								$dt_arr = explode('-', $data);
+								$data = strtotime($dt_arr[2].'-'.$dt_arr[0].'-'.$dt_arr[1]);
 							}
 							$order_data[$index] = $data;
 						}
 						if (strpos($key, 'item_') !== false) { // check mailing_dates value
 							$index = substr($key, 5);
+							if($index == 'date' || $index == 'proofsent_date' || $index == 'proofapproved_date'){
+								$dt_arr = explode('-', $data);
+								$data = strtotime($dt_arr[2].'-'.$dt_arr[0].'-'.$dt_arr[1]);
+							}
 							$mailing_dates_data[$index] = $data;
 						}						
-					}					
+					}
 					$this->orderdata->update_order($cond, $order_data);
 					
 					$file_name = $this->defaultdata->generatedRandString().'.pdf';					
