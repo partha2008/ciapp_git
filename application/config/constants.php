@@ -100,13 +100,15 @@ define('UPLOAD_RELATIVE_LOGO_PATH', UPLOAD_RELATIVE_PATH.'logo/');
 define('UPLOAD_RELATIVE_PRODUCT_PATH', UPLOAD_RELATIVE_PATH.'product/');
 define('UPLOAD_RELATIVE_ORDER_PATH', UPLOAD_RELATIVE_PATH.'order/');
 
-define('TABLE_SETTINGS', 'settings');
-define('TABLE_CMS', 'cms');
-define('TABLE_USER', 'users');
-define('TABLE_CATEGORY', 'category');
-define('TABLE_PRODUCT', 'product');
-define('TABLE_ORDER', 'orders');
-define('TABLE_MAILING_DATE', 'mailing_dates');
-define('TABLE_UPLOADED_FILE', 'uploaded_files');
-define('TABLE_COUPON', 'coupon');
-define('TABLE_LOG', 'log');
+define('TABLE_PREFIX', 'reww_');
+
+define('TABLE_SETTINGS', TABLE_PREFIX.'settings');
+define('TABLE_CMS', TABLE_PREFIX.'cms');
+define('TABLE_USER', TABLE_PREFIX.'users');
+define('TABLE_CATEGORY', TABLE_PREFIX.'category');
+define('TABLE_PRODUCT', TABLE_PREFIX.'product');
+define('TABLE_ORDER', TABLE_PREFIX.'orders');
+define('TABLE_MAILING_DATE', TABLE_PREFIX.'mailing_dates');
+define('TABLE_UPLOADED_FILE', TABLE_PREFIX.'uploaded_files');
+define('TABLE_COUPON', TABLE_PREFIX.'coupon');
+define('TABLE_LOG', TABLE_PREFIX.'log');
