@@ -4,6 +4,11 @@
 	<?php echo $head;?>
 	<div class="container">
 		<div class="row">
+			<div class="col-md-4 col-md-offset-4 text-center" style="margin-top:5%;">
+				<img src="<?php echo UPLOAD_LOGO_PATH.'logo.png?v='.time();?>" width="230">
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">
@@ -27,6 +32,9 @@
 									</label>
 								</div>
 								<button class="btn btn-lg btn-success btn-block" type="submit">Login</button>
+								<div class="checkbox">
+									<a class="help-block" href="<?php echo base_url('admin/forget-password');?>">Forgot Password?</a>
+								</div>
 							</fieldset>
 						</form>
 					</div>

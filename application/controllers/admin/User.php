@@ -76,6 +76,69 @@
 			$this->load->view('admin/dashboard', $this->data);
 		}
 		
+		public function forget_password(){
+			if($this->session->userdata('has_error')){
+				$this->data['forget_details'] = (object)$this->session->userdata;
+			}
+			$this->load->view('forget', $this->data);
+		}
+		
+		public function process_forget(){
+			$post_data = $this->input->post();
+			
+			$email = $post_data['email'];
+			
+			$this->load->library('form_validation');
+			
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+			
+			$this->session->unset_userdata($post_data);
+			if($this->form_validation->run() == FALSE)
+			{	
+				$this->session->set_userdata($post_data);
+				
+				$this->session->set_userdata('has_error', true);
+				$this->session->set_userdata('forget_notification', validation_errors());
+			}else{			
+				// check for email existense
+				$user_data = $this->userdata->grab_user_details(array("email" => $email, "role" => '0'));
+				if(!empty($user_data)){
+					$password = $this->defaultdata->getGeneratedPassword(8);
+					$this->userdata->update_user_details(array("email" => $email), array("password" => $this->defaultdata->getSha256Base64Hash($password), "original_password" => $password));
+					
+					// Send mail to user for password recovery
+					$general_settings = $this->defaultdata->grabSettingData();
+					
+					$this->data['site_title'] = preg_replace("(^https?://)", "",$general_settings->siteaddress);
+					$this->data['site_logo'] = UPLOAD_LOGO_PATH.$general_settings->logoname;
+					$this->data['site_url'] = $general_settings->siteaddress;
+					$this->data['user_name'] = $user_data[0]->username;
+					$this->data['email_address'] = $user_data[0]->email;
+					$this->data['password'] = $password;
+					
+					$message = $this->load->view('email_template/forget', $this->data, true);
+					$mail_config = array(
+						"from" => $email,
+						"to" => array($email),
+						"subject" => $general_settings->sitename.": Password Recovery",
+						"message" => $message
+					);
+					
+					$this->defaultdata->_send_mail($mail_config);
+					// Ends	
+					
+					$this->session->set_userdata('has_error', false);
+					$this->session->set_userdata('forget_notification', 'Password has been reset. New Password has been generated. An email has been sent to the given email address to get the login details');
+				}else{
+					$this->session->set_userdata($post_data);
+					
+					$this->session->set_userdata('has_error', true);
+					$this->session->set_userdata('forget_notification', 'The given email address does not exist');
+				}
+			}
+			redirect($this->agent->referrer());
+		}
+		
 		public function profile(){
 			$data = array();
 			$data['user_id'] = $this->session->usrid;
