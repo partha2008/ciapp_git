@@ -305,6 +305,8 @@
 				);
 				$this->userdata->update_cms_content($cond, $data);
 				
+				$this->session->set_userdata('has_error', false);
+				
 				redirect(base_url('admin/'.$post_data['mode']));
 			}
 		}
