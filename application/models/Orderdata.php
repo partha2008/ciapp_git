@@ -40,7 +40,7 @@ class Orderdata extends CI_Model {
 			}
 		}
 		
-		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM mailing_dates LEFT JOIN ".TABLE_ORDER." ON mailing_dates.order_id = ".TABLE_ORDER.".order_id WHERE ".$where.$whr." ORDER BY ".TABLE_ORDER.".date_added DESC";
+		$sql = "SELECT ".TABLE_MAILING_DATE.".mailing_date_id, ".TABLE_MAILING_DATE.".item, ".TABLE_MAILING_DATE.".quantity, ".TABLE_MAILING_DATE.".proof_pdf, ".TABLE_MAILING_DATE.".proofapproved_date, ".TABLE_MAILING_DATE.".proofsent_date, ".TABLE_MAILING_DATE.".total, ".TABLE_MAILING_DATE.".date, ".TABLE_MAILING_DATE.".status, ".TABLE_ORDER.".order_id, ".TABLE_ORDER.".orderid, ".TABLE_ORDER.".email, ".TABLE_ORDER.".first_name, ".TABLE_ORDER.".last_name, ".TABLE_ORDER.".date_added FROM ".TABLE_MAILING_DATE." LEFT JOIN ".TABLE_ORDER." ON ".TABLE_MAILING_DATE.".order_id = ".TABLE_ORDER.".order_id WHERE ".$where.$whr." ORDER BY ".TABLE_ORDER.".date_added DESC";
 		
 		$query = $this->db->query($sql);
 		
@@ -70,8 +70,9 @@ class Orderdata extends CI_Model {
 		}
 		$this->db->order_by('date_added','desc');		
 		$query = $this->db->get(TABLE_ORDER);
-		
-		return $query->result()[0];
+		$result = $query->result();
+        
+		return $result[0];
 	}
 	
 	public function grab_mailing_dates($cond = array(), $like = array(), $limit = array()){
